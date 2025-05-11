@@ -20,6 +20,10 @@ Clone the repository and install dependencies:
 
     cd game-backend-developer-assignment
 
+**Ensure Node Version via nvm**
+
+    nvm use 22
+
 **Install dependencies for both apps**
 
     cd functions && npm install
@@ -64,7 +68,9 @@ Service	URL
 
 ### Seed Firestore (in Emulator)
 
-To populate the Firestore emulator with demo game data from games.json, start a new terminal and:
+To populate the Firestore emulator with demo game data from games.json, 
+
+**start a new terminal** and:
 
     cd functions
     npm run seed
