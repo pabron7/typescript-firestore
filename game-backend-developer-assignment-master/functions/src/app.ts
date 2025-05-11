@@ -2,6 +2,7 @@ import express, { type Express, type NextFunction, type Response, type Request }
 import morgan from 'morgan';
 import router from './routes/index.js';
 import { HttpError } from './classes/HttpError.js';
+import listEndpoints from 'express-list-endpoints';
 
 export const app: Express = express();
 
@@ -10,6 +11,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use('/', router);
+
+console.log('Mounted routes:');
+console.table(listEndpoints(app));
+
+
 app.use((_req, res, next) => {
   next(new HttpError('Path not found', 404));
 });
@@ -29,4 +35,8 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
       error: 'Internal server error',
     });
   }
+
 });
+
+
+
