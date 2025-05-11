@@ -1,6 +1,10 @@
 import { Layout } from "antd";
 import { GameTable } from "../components/GameTable";
-import games from "../../../games.json";
+import type { Game } from '../types/Game';
+import gamesRaw from '../../../games.json';
+
+const games = gamesRaw as Game[];
+
 
 const { Header, Content } = Layout;
 
