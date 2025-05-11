@@ -2,14 +2,13 @@ process.env.FIRESTORE_EMULATOR_HOST = 'localhost:5005';
 
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import type { Game } from '../../../admin/src/types/Game';
 import { getFirestore } from '../../src/apis/firestore/getFirestore';
 
 const filePath = resolve(process.cwd(), '../games.json');
 
 console.log('Loading games.json...');
 const raw = readFileSync(filePath, 'utf-8');
-const games: Game[] = JSON.parse(raw);
+const games = JSON.parse(raw);
 console.log(`Loaded ${games.length} games from JSON`);
 
 async function seedGames() {
