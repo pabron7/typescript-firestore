@@ -1,3 +1,3 @@
-export * from './memoize.js';
-export * from './router.js';
-export * from './wrapAsync.js';
+export * from './memoize';
+export * from './router';
+export * from './wrapAsync';
