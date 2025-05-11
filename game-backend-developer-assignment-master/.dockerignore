@@ -1,0 +1,25 @@
+# Ignore node modules and lock files
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore build artifacts
+dist
+lib
+lib-scripts
+coverage
+
+# Ignore local dev files
+.env
+.env.local
+.vscode
+.DS_Store
+
+# Ignore test output
+firebase-debug.log
+firebase-debug.*.log
+
+# Ignore git data
+.git
+.gitignore
