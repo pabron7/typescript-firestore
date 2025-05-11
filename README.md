@@ -44,7 +44,9 @@ Build and run the project using Docker:
 
 **Build Docker image**
     
+    cd functions
     npm run buildImage
+
 
 **Start the emulator container (binds ports 5000–5007 and 9150)**
     
@@ -62,7 +64,7 @@ Service	URL
 
 ### Seed Firestore (in Emulator)
 
-To populate the Firestore emulator with demo game data from games.json:
+To populate the Firestore emulator with demo game data from games.json, start a new terminal and:
 
     cd functions
     npm run seed
