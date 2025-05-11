@@ -5,7 +5,7 @@
   "author": "Softgames",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "echo 'Just nope'",
+    "start": "vite --force",
     "dev": "vite --force",
     "test": "vitest run --coverage",
     "build": "tsc && vite build",
