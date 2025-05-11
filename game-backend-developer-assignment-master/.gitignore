@@ -75,5 +75,4 @@ node_modules/
 /functions/lib
 
 # General build artifacts
-*.js
 *.js.map
