@@ -15,9 +15,7 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
     }
   ],
   "hosting": {
@@ -36,26 +34,22 @@
         "destination": "/index.html"
       }
     ],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
-"emulators": {
-  "functions": {
-    "port": 5004
-  },
-  "firestore": {
-    "port": 5005
-  },
-  "hosting": {
-    "port": 5006
-  },
-  "ui": {
-    "enabled": true,
-    "port": 5007
-  },
-  "singleProjectMode": true
-}
+  "emulators": {
+    "functions": {
+      "port": 5004
+    },
+    "firestore": {
+      "port": 5005
+    },
+    "hosting": {
+      "port": 5006
+    },
+    "ui": {
+      "enabled": true,
+      "port": 5007
+    },
+    "singleProjectMode": true
+  }
 }
