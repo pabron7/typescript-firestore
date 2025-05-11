@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "moduleResolution": "nodenext",
     "noImplicitReturns": true,
@@ -9,6 +9,7 @@
     "rootDir": "src",
     "sourceMap": true,
     "strict": true,
+    "isolatedModules": true,
     "target": "es2017"
   },
   "compileOnSave": true,
