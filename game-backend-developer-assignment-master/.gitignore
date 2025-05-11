@@ -67,3 +67,13 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Admin build
+/admin/dist
+
+# Functions build
+/functions/lib
+
+# General build artifacts
+*.js
+*.js.map
