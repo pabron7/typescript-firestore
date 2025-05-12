@@ -10,16 +10,17 @@ WORKDIR /app
 # Copy everything
 COPY . .
 
-# Install Firebase CLI
+# Install Firebase CLI 
 RUN npm install -g firebase-tools
 
-# Install deps for admin and functions
-RUN cd functions && npm ci
-RUN cd admin && npm ci
+# Install and build backend (functions)
+RUN cd functions && npm ci && npm run build
+
+# Install and build frontend (admin)
+RUN cd admin && npm ci && npm run build
 
 # Expose Firebase emulator ports 
 EXPOSE 5000 5001 5002 5003 5004 5005 5006 5007 9150
 
 # Default command
 CMD ["firebase", "emulators:start"]
-
