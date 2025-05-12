@@ -10,6 +10,14 @@ This project includes a Firebase backend and a React-based Admin UI. All service
 
     macOS or Linux recommended (tested on macOS)
 
+**Warning**
+
+This project was developed using an **incremental and linear commit strategy**, Commits were pushed incrementally to show the **thinking and implementation flow** transparently.
+Pulling or checking out commits **individually** is **not recommended**, as they may contain incomplete logic or transient errors that were resolved in later commits.
+
+* For full context, refer to the latest commit on `main`.
+
+
 ## Installation
 
 Clone the repository and install dependencies:
@@ -62,7 +70,7 @@ Service	URL
 
 * Admin UI	http://localhost:5006
 * Functions API	http://localhost:5004
-* Frontend API  http://localhost:5004/demo-project/europe-west3/api/v1/games
+* Game API Endpoint  http://localhost:5004/demo-project/europe-west3/api/v1/games
 * Firestore UI	http://localhost:5007/firestore
 * Emulator UI	http://localhost:5007
 
@@ -79,14 +87,91 @@ If successsful, you’ll see the log:
     
     "Seeded 27 games into Firestore."
 
-### License
+## Project Structure
+
+    game-backend-developer-assignment-master/
+    ├── admin/                     # React frontend for admin UI
+    │   ├── src/
+    │   │   ├── components/        # Reusable UI components
+    │   │   ├── hooks/             # Custom React hooks
+    │   │   ├── types/             # TypeScript types
+    │   │   ├── api/               # API functions
+    │   │   └── pages/             # Page-level components
+    │   │   └── utils/             # Utility functions
+    │   └── package.json
+    │
+    ├── functions/                 # Firebase Functions backend
+    │   ├── src/
+    │   │   ├── apis/              # Firestore and Firebase admin API wrappers
+    │   │   ├── classes/           # Custom error classes
+    │   │   ├── helpers/           # Expansion update utilities
+    │   │   ├── routes/            # Express routers
+    │   │   ├── scripts/           # FIRESTORE SEEDING SCRIPT
+    │   │   ├── utils/             # Memoization, router helpers, etc.
+    │   │   ├── tests/             # Unit, Integration and Route Tests.
+    │   │   └── app.ts             # Express app entry point
+    │   ├── jest.config.js         # Test config
+    │   ├── tsconfig.json
+    │   └── package.json           # REQUESTED SCRIPTS
+    │
+    ├── games.json                 # Static seed data
+    ├── Dockerfile                 # Container setup for emulator
+    ├── .dockerignore              # Ignore files for Docker
+    ├── firebase.json              # Emulator and deploy config
+    └── README.md
+
+## Testing
+
+This project includes unit and integration tests powered by jest, ts-jest, and firebase-functions-test.
+
+**Run All Test**
+    
+    cd functions
+    npm run test
+
+Tested units include:
+
+* memoize utility function (unit)
+* Firestore logic (integration)
+* REST API endpoints (/v1/games) including:
+    * Create
+    * Read
+    * Update
+    * Delete
+
+## Covered Edge Cases
+
+* Preventing duplicate expansions in BaseGame.expansions[]
+* Appending expansion ID to BaseGame on creation
+* Removing expansion ID from BaseGame on deletion
+* Required fields enforced via form and backend validation
+* Handling missing documents
+* Non-editable critical fields (type, baseGame) during update to ensure integrity
+
+## Known Issues
+
+* Orphaned Expansions
+    * Deleting a BaseGame does not automatically delete or update its related Expansion entries. This can lead to expansions pointing to non-existent base games.
+
+* Manual Game ID Generation
+    * While IDs are auto-generated in the form, there's no backend enforcement to ensure uniqueness. Accidental reuse may overwrite data if two entries share the same ID.
+
+* No Duplicate Name Check
+    * There is no prevention of duplicate Game names, which can make managing and identifying entries difficult in a larger dataset.
+
+* Incomplete Field Reset
+    * On type switch (for example, changing from Expansion to BaseGame mid-form), some conditional fields like baseGame or standalone may remain in the form data and be incorrectly submitted unless explicitly reset.
+
+## License
 This project is unlicenced. 
 
 Note: This project was developed as part of a Trial Task. Mentioned repository was provided by the evaluation provider for evaluation purposes.
 
-### Developer
+*** 
 
-This project was developed by Alp Kurt. 
+## Developer
+
+This project was developed by [Alp Kurt](https://www.linkedin.com/in/alp-kurt/). 
 
 * krtalp@gmail.com
 * [alpkurt.com](https://alpkurt.com)
