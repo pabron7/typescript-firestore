@@ -17,75 +17,59 @@ Pulling or checking out commits **individually** is **not recommended**, as they
 
 * For full context, refer to the latest commit on `main`.
 
-
 ## Installation
 
-Clone the repository and install dependencies:
+### Local Development (with hot reload)
+This mode is ideal for debugging or extending functionality.
 
-### Clone repo
-
-    git clone https://gitlab.com/softgames-public/game-backend-developer-assignment.git
-
-    cd game-backend-developer-assignment
-
-**Ensure Node Version via nvm**
-
+#### Ensure correct Node version
     nvm use 22
 
-**Install dependencies for both apps**
-
+#### Install dependencies
     cd functions && npm install
-
     cd ../admin && npm install
-
     cd ..
 
-**Build the Admin UI**
-
-Before Docker can serve the Admin UI, build it:
-
+#### Start frontend dev server (hot reload)
     cd admin
+    npm run dev
+* **runs on http://localhost:5173**
 
-    npm run build
+#### Start Firebase emulators (functions, firestore)
+    cd ../functions
+    npm run serve
+* **Admin UI on http://localhost:5006**
+* **API on http://localhost:5004/demo-project/europe-west3/api/v1/games**
+* **Firestore UI on http://localhost:5007**
 
-    cd ..
+### Docker Deployment (emulated full environment)
 
-### Run in Docker
+This mode is used to replicate a final delivery environment.
 
-Build and run the project using Docker:
-
-**Build Docker image**
-    
+#### Build Docker Image
     cd functions
     npm run buildImage
 
-
-**Start the emulator container (binds ports 5000–5007 and 9150)**
-    
+#### Serve Docker
     npm run start
 
-**This will start the following services:**
-
-Service	URL
-
+Once running, access services at:
 * Admin UI	http://localhost:5006
 * Functions API	http://localhost:5004
-* Game API Endpoint  http://localhost:5004/demo-project/europe-west3/api/v1/games
+* Game API	http://localhost:5004/demo-project/europe-west3/api/v1/games
 * Firestore UI	http://localhost:5007/firestore
 * Emulator UI	http://localhost:5007
 
-### Seed Firestore (in Emulator)
+### Seed Firestore with Sample Data
 
-To populate the Firestore emulator with demo game data from games.json, 
-
-**start a new terminal** and:
+Run the following in a separate terminal to populate Firestore with games.json data:
 
     cd functions
     npm run seed
 
-If successsful, you’ll see the log:
+If successful, you'll see:
     
-    "Seeded 27 games into Firestore."
+    Seeded 27 games into Firestore.
 
 ## Project Structure
 
@@ -139,6 +123,13 @@ Tested units include:
     * Update
     * Delete
 
+### Test Environment Setup
+
+To ensure Firestore emulator behaves correctly in tests:
+
+- Make sure the environment variable `FIRESTORE_EMULATOR_HOST` is set (`jest.setup.js` handles this).
+- Tests use real Firestore emulator reads/writes (not mocks).
+
 ## Covered Edge Cases
 
 * Preventing duplicate expansions in BaseGame.expansions[]
@@ -161,6 +152,9 @@ Tested units include:
 
 * Incomplete Field Reset
     * On type switch (for example, changing from Expansion to BaseGame mid-form), some conditional fields like baseGame or standalone may remain in the form data and be incorrectly submitted unless explicitly reset.
+
+* Live Reload Not Available via Docker:
+    * Docker is optimized for testing the final deployment image. For rapid iteration (with hot reload), local development is preferred.
 
 ## License
 This project is unlicenced. 
