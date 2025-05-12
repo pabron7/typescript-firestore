@@ -1,6 +1,8 @@
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { useEffect, useState } from 'react';
 import { Game } from '../types/Game';
-import { useEffect } from 'react';
+import { generateId } from '../utils/generateId';
+import { useGames } from '../hooks/useGames';
 
 export type GameFormValues = Omit<Game, 'id'> & { id?: string };
 
@@ -18,57 +20,99 @@ export const GameForm = ({
   loading = false,
 }: GameFormProps) => {
   const [form] = Form.useForm();
+  const { games } = useGames();
+  const [type, setType] = useState<Game['type']>('BaseGame');
+
+  const isEditMode = Boolean(initialValues?.id); // ← Detect edit mode
+  const baseGames = games.filter((g) => g.type === 'BaseGame');
 
   useEffect(() => {
-    if (initialValues) {
-      form.setFieldsValue(initialValues);
-    }
-  }, [initialValues, form]);
+    const id = initialValues?.id || generateId();
+    form.setFieldsValue({ ...initialValues, id });
+    setType(initialValues?.type || 'BaseGame');
+  }, [initialValues]);
 
+  const handleFinish = (values: GameFormValues) => {
+      // Normalize the submitted values to ensure defaults and structure
+    const safeValues: Game = {
+      ...values,
+      id: values.id || generateId(), // fallback Id
+      players: {
+        min: values.players?.min ?? 1,
+        max: values.players?.max ?? 1,
+      },
+      expansions: values.type === 'BaseGame' ? [] : undefined,
+      baseGame: values.type === 'Expansion' ? values.baseGame : undefined,
+      standalone: values.type === 'Expansion' ? values.standalone ?? false : undefined,
+    };
+  
+    onSubmit(safeValues);
+  };
+  
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onSubmit}
-      initialValues={initialValues}
-    >
-      <Form.Item
-        label="ID"
-        name="id"
-        rules={[{ required: true, message: 'ID is required' }]}
-      >
+    <Form form={form} layout="vertical" onFinish={handleFinish}>
+      {/* Hidden ID */}
+      <Form.Item name="id" hidden>
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Name"
-        name="name"
-        rules={[{ required: true, message: 'Name is required' }]}
-      >
+      {/* Always Editable */}
+      <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Name is required' }]}>
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Publisher"
-        name="publisher"
-      >
+      <Form.Item label="Publisher" name="publisher">
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Release Year"
-        name="releaseYear"
-      >
+      <Form.Item label="Release Year" name="releaseYear">
         <InputNumber style={{ width: '100%' }} />
       </Form.Item>
 
+      <Form.Item label="Min Players" name={['players', 'min']}>
+        <InputNumber min={1} style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item label="Max Players" name={['players', 'max']}>
+        <InputNumber min={1} style={{ width: '100%' }} />
+      </Form.Item>
+
+      {/* Only editable on creation */}
       <Form.Item
         label="Type"
         name="type"
         rules={[{ required: true, message: 'Type is required' }]}
       >
-        <Input />
+        <Select onChange={setType} disabled={isEditMode}>
+          <Select.Option value="BaseGame">Base Game</Select.Option>
+          <Select.Option value="Expansion">Expansion</Select.Option>
+        </Select>
       </Form.Item>
+
+      {type === 'Expansion' && (
+        <>
+          <Form.Item
+            label="Base Game"
+            name="baseGame"
+            rules={[{ required: true, message: 'Base Game is required' }]}
+          >
+            <Select placeholder="Select base game" disabled={isEditMode}>
+              {baseGames.map((bg) => (
+                <Select.Option key={bg.id} value={bg.id}>
+                  {bg.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Standalone" name="standalone">
+            <Select >
+              <Select.Option value={true}>Yes</Select.Option>
+              <Select.Option value={false}>No</Select.Option>
+            </Select>
+          </Form.Item>
+        </>
+      )}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>
@@ -78,3 +122,4 @@ export const GameForm = ({
     </Form>
   );
 };
+
