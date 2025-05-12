@@ -1,4 +1,4 @@
-import { memoize } from '../memoize';
+import { memoize } from '../utils/memoize';
 
 describe('memoize()', () => {
   it('should only call the function once', () => {

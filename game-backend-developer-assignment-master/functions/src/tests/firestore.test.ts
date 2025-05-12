@@ -1,5 +1,5 @@
-import { getFirestore } from "../../../src/apis/firestore/getFirestore";
-import { getGames } from "../../../src/apis/firestore/games";
+import { getFirestore } from "../apis/firestore/getFirestore";
+import { getGames } from "../apis/firestore/games";
 
 process.env.FIRESTORE_EMULATOR_HOST = "localhost:5005";
 
